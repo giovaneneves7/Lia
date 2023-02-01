@@ -4,6 +4,7 @@ package com.github.nekoyasha7.lia.commands.admslashcommands;
 
 //<<< Imports >>>//
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -34,22 +35,9 @@ public class AnunciarNovel extends ListenerAdapter {
 
             String tagsChannelId = "857365277082779658";
 
-            String everyoneRoleId = "880292378806747146";
-            String cidadaoVulcanicoRoleId = "885311353466785793";
-            String recrutaRoleId = "1066376759089561752";
-
-
             Channel tagsChannel = event.getGuild().getTextChannelById(tagsChannelId);
 
-            //   Role everyoneRole = event.getGuild().getRoleById(everyoneRoleId);
-            // Role cidadaoVulcanicoRole = event.getGuild().getRoleById(cidadaoVulcanicoRoleId);
-            // Role recrutaRole = event.getGuild().getRoleById(recrutaRoleId);
-
             String tagsChannelMention = tagsChannel.getAsMention();
-
-            //String cidadaoVulcanicoRoleMention = cidadaoVulcanicoRole.getName();
-            //String everyoneRoleMention = everyoneRole.getName();
-            //String recrutaRoleMention = recrutaRole.getName();
 
             String embedMessage = "**Título original:** " + event.getOption("cargo").getAsRole().getAsMention() + "\n\n" +
                     "**Autor original:** " + event.getOption("autor").getAsMember().getAsMention() + "\n\n" +
@@ -61,14 +49,34 @@ public class AnunciarNovel extends ListenerAdapter {
             EmbedBuilder embed = new EmbedBuilder();
 
 
-            if(event.getOption("everyone").getAsBoolean())
-                embedMessage += "\n\n || @everyone @Cidadão Vulcanico}  @Recruta ||";
+            if(event.getOption("everyone").getAsBoolean()){
+                try{
+
+                    String everyoneId = "1069982298419777626";
+                    String cidadaoVulcanicoId = "1069982298419777626";
+                    String recrutaId = "1069982298419777626";
+                    Guild guild = event.getGuild();
+
+                    embedMessage += "\n\n|| " +
+                                                    guild.getRoleById(everyoneId).getAsMention() + " " +
+                                                    guild.getRoleById(cidadaoVulcanicoId).getAsMention() + " " +
+                                                    guild.getRoleById(recrutaId).getAsMention() + " " +
+                                       " ||";
+                } catch (Exception e){
+
+                    System.out.println("Exception in 'if(event.getOption(\"everyone\").getAsBoolean())': \n" + e);
+
+                    embedMessage += "\n\n|| @everyone @Cidadão Vulcânico @Recruta||";
+                }
+            }
+
 
             //Embed setups
             embed.setColor(Color.green);
             embed.setAuthor("Autor da novel: " + event.getOption("autor").getAsUser().getName());
             embed.setTitle(event.getOption("cargo").getAsRole().getName(), event.getOption("link").getAsString());
             embed.setDescription(embedMessage);
+            embed.setFooter("Clique no título da novel para ler", "https://user-images.githubusercontent.com/5415001/39671960-87970a08-5143-11e8-8126-20b421cc00a4.png");
             embed.setImage(event.getOption("capa").getAsString());
             embed.addBlankField(false);
 

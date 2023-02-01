@@ -3,8 +3,8 @@ package com.github.nekoyasha7.lia.setups;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
-
 import com.github.nekoyasha7.lia.main.Main;
+
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -35,7 +35,7 @@ public class Presence extends ListenerAdapter {
 
             case "STREAMING":
                 Main.jda.getPresence().setPresence(
-                        OnlineStatus.ONLINE, Activity.of(Activity.ActivityType.STREAMING, ("" + text), "https://discord.gg/BdUjBrVPCT")
+                        OnlineStatus.ONLINE, Activity.of(Activity.ActivityType.STREAMING, ("" + text), "https://discord.gg/vulcan-3k-410158562929803275")
                 );
                 return true;
         }

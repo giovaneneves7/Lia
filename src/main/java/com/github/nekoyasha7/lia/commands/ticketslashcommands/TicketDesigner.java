@@ -14,8 +14,8 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.Color;
-import java.util.EnumSet;
 
+import java.util.EnumSet;
 //<<< End Imports >>>//
 /*
  /* @author NekoYasha
@@ -40,8 +40,12 @@ public class TicketDesigner extends TicketAutor{
             eb.setDescription(description);
             eb.addBlankField(false);
 
-            event.replyEmbeds(eb.build())
-                    .addActionRow(startButton(buttonText))
+            event.getChannel().sendMessageEmbeds(eb.build())
+                              .addActionRow(startButton(buttonText))
+                              .queue();
+
+            event.reply("Embed enviada com sucesso!")
+                    .setEphemeral(true)
                     .queue();
         }
     }

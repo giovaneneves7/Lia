@@ -41,8 +41,12 @@ public class TicketAvaliador extends TicketAutor{
                 eb.setDescription(description);
                 eb.addBlankField(false);
 
-                event.replyEmbeds(eb.build())
-                        .addActionRow(startButton(buttonText))
+                event.getChannel().sendMessageEmbeds(eb.build())
+                                  .addActionRow(startButton(buttonText))
+                                  .queue();
+
+                event.reply("Embed enviada com sucesso!")
+                        .setEphemeral(true)
                         .queue();
 
             } else

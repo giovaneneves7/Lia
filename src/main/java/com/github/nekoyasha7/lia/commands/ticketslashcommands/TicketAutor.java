@@ -64,6 +64,7 @@ public class TicketAutor extends ListenerAdapter {
                         .setEphemeral(true)
                         .queue();
                 eb.clearFields();
+
             } else
                 event.reply("Você não tem permissão para usar este comando! ;)")
                         .setEphemeral(true)

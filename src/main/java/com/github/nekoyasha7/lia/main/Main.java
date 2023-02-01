@@ -5,9 +5,8 @@ package com.github.nekoyasha7.lia.main;
 //<<< Imports >>>//
 import io.github.cdimascio.dotenv.Dotenv;
 
-import com.github.nekoyasha7.lia.setups.AddEvents;
-import com.github.nekoyasha7.lia.setups.Presence;
-import com.github.nekoyasha7.lia.setups.RegisterSlashCommand;
+import com.github.nekoyasha7.lia.setups.*;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -29,12 +28,11 @@ public class Main {
 
        Dotenv dotenv = Dotenv.load();
        String token = dotenv.get("TOKEN");
-
         jda = JDABuilder.createDefault(token)
                         .enableIntents((EnumSet.allOf(GatewayIntent.class)))
                         .build();
 
-        Presence.setPresence("WATCHING", "Destino Subvertido");
+        Presence.setPresence("WATCHING", "Lendário Mecânico");
         RegisterSlashCommand.registerSlashCommand();
         AddEvents.addEvents();
     }
