@@ -3,12 +3,15 @@ package com.github.nekoyasha7.lia.commands.ticketslashcommands;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+import com.github.nekoyasha7.lia.main.Main;
+import com.github.nekoyasha7.lia.util.Vulcan;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -62,6 +65,8 @@ public class TicketTradutor extends TicketAutor{
 
         if(event.getComponentId().equals("startButtonTradutor")){
 
+            Vulcan vulcan = new Vulcan();
+
             event.reply("Ticket aberto com sucesso!")
                     .setEphemeral(true)
                     .queue();
@@ -86,25 +91,27 @@ public class TicketTradutor extends TicketAutor{
                     .setParent(category)
                     .complete();
 
-
-            avaliadorRoleName = "●❯─•〔Avaliador Novel〕•─❮●";
-            avaliadorId = "874810883988127764";
-            Role role = guild.getRolesByName(avaliadorRoleName, true)
-                    .get(0);
+            vulcan.setRoleAvaliadorName("●❯─•〔Avaliador Novel〕•─❮●");
+            vulcan.setRoleAvaliadorId("874810883988127764");
+            String privateTicketId = privateTicket.getId();
 
 
-            for(Member roleMember : guild.getMembersWithRoles(role)){
-                roleMember.getUser().openPrivateChannel().queue((channel) -> {
-                    channel.sendMessage("Um novo ticket para **Tradutor** foi aberto por " + member.getUser().getName() + "\n Verifique!")
-                            .queue();
-                });
-            }
+            //--+ Envia uma mensagem inicial para o ticket +--//
 
-
-            privateTicket.sendMessage("Olá, " + member.getAsMention() + " Fico contente que tenha optado por fazer uma avaliação na Vulcan Novels para **Tradutor**.\n" +
+            privateTicket.sendMessage("> **Avaliando:** " + member.getUser().getName() + "\n" +
+                            "> **Tipo de Avaliação:** Tradutor\n" +
+                            "> **Tipo de Avaliador:** " +  guild.getRoleById(avaliadorId).getAsMention() + "\n\n" +
+                            "Olá, " + member.getAsMention() + ", Fico contente que tenha optado por fazer uma avaliação na Vulcan Novels para **Tradutor**.\n" +
                             "Em breve um " + guild.getRoleById(avaliadorId).getAsMention() + " iniciará o seu processo de avaliação!")
                     .addActionRow(Button.danger("closeTicket", "Fechar ticket"))
                     .queue();
+
+            //--+Pega o ID do servidor da staff e envia informações dos novos tickets em um canal específico+--//
+            Guild vulcanStaff = Main.jda.getGuildById(vulcan.getServerVulcanStaffId());
+            MessageChannel ticketsLog = vulcanStaff.getTextChannelById(vulcan.getChannelTicketsLogId());
+            ticketsLog.sendMessageEmbeds(vulcan.createEmbedNewTicket("Tradutor", member.getUser().getName(), vulcan.getServerVulcanStaffId(), vulcan.getRoleAvaliadorId(), privateTicketId).build()).queue();
+
+            avaliando = event.getUser().getName();
         }
     }
 

@@ -10,11 +10,11 @@ package com.github.nekoyasha7.lia.commands.ticketslashcommands.ticketautor;
  */
 //<<< Class >>>//
 public class Avaliador {
-    //Attributes
+    //--+ Attributes +--//
     String name;
     String tag;
 
-    //Getters and Setters
+    //--+ Getters and Setters +--//
     public String getName(){
         return this.name;
     }

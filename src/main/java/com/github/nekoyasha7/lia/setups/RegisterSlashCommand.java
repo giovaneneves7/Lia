@@ -3,7 +3,6 @@ package com.github.nekoyasha7.lia.setups;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
-
 import com.github.nekoyasha7.lia.main.Main;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 //<<< End Imports >>>//
@@ -13,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 //<<< Class >>>//
 public class RegisterSlashCommand {
 
+    //--+Registra os Slash Commands e seus parâmetros obrigatórios e opcionais--+//
     public static void registerSlashCommand(){
         //Public commands
         Main.jda.upsertCommand("ping", "Comando para testar a conexão com o bot")
@@ -25,6 +25,10 @@ public class RegisterSlashCommand {
 
         Main.jda.upsertCommand("say", "repete a mensagem digitada")
                 .addOption(OptionType.STRING, "mensagem", "mensagem a ser repetida", true)
+                .queue();
+
+        Main.jda.upsertCommand("ask", "Tem algumas dúvida? Pergunte e eu responderei!")
+                .addOption(OptionType.STRING, "prompt", "digite sua pergunta", true)
                 .queue();
 
         //'Avaliação Autor' commands

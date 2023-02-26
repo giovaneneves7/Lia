@@ -3,13 +3,15 @@ package com.github.nekoyasha7.lia.commands.ticketslashcommands;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+import com.github.nekoyasha7.lia.main.Main;
+import com.github.nekoyasha7.lia.util.Vulcan;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -27,26 +29,29 @@ import java.util.EnumSet;
 public class TicketAutor extends ListenerAdapter {
 
     EmbedBuilder eb = new EmbedBuilder();
-
-    //Variables
     String buttonText;
+
+    //--+Variáveis Globais de cargos (roles)+--//
     String recrutamentoID = "882517867755622430";
-    String avaliadorRoleName = "●❯─•〔Avaliador Novel〕•─❮●";
+    String avaliando = "";
     String avaliadorId = "874810883988127764";
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){
 
+        //--+Verifica se o usuário é Bot--+//
         if(event.getMember().getUser().isBot()) return;
 
         if(event.getName().equalsIgnoreCase("criar-painel-ticket-autor")){
 
+            //--+Verifica as permissões do usuário+--//
             if(event.getMember().hasPermission(Permission.MANAGE_CHANNEL)){
+
                 String title = event.getOption("titulo").getAsString();
                 String description = event.getOption("descricao").getAsString();
                 buttonText = event.getOption("botao").getAsString();
 
-                //Embed setups
+                //--+Embed setups+--//
                 eb.setColor(Color.green);
                 eb.setTitle(title);
                 eb.setDescription(description);
@@ -56,6 +61,7 @@ public class TicketAutor extends ListenerAdapter {
                 eb.addBlankField(true);
 
 
+                //--+ Envia e Embed Configurada +--//
                 event.getChannel().sendMessageEmbeds(eb.build())
                         .addActionRow(startButton(buttonText))
                         .queue();
@@ -72,13 +78,16 @@ public class TicketAutor extends ListenerAdapter {
         }
     }
 
+    //--+ Evento de quando o usuário clica no botão +--//
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event){
 
         if(event.getComponentId().equals("startButtonAutor")){
 
-            String roles = String.valueOf(event.getMember().getRoles());
+            //--+ Instância a Class Vulcan +--//
+            Vulcan vulcan = new Vulcan();
 
+            //--+ Envia mensagem ephemeral quando o ticket é aberto +--//
             event.reply("Ticket aberto com sucesso!")
                     .setEphemeral(true)
                     .queue();
@@ -86,8 +95,9 @@ public class TicketAutor extends ListenerAdapter {
             Member member = event.getMember();
             Guild guild = event.getGuild();
 
-            Category category = guild.getCategoryById(recrutamentoID);
+            Category category = guild.getCategoryById(vulcan.getCategoryRecrutamentoId());
 
+            //--+ Cria um Ticket Privado e atualiza as permissões do usuário +--//
             TextChannel privateTicket = guild.createTextChannel("ticket-" + member.getUser().getName())
                     .addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL), null)
                     .addPermissionOverride(guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL))
@@ -95,23 +105,28 @@ public class TicketAutor extends ListenerAdapter {
                     .setParent(category)
                     .complete();
 
+            //--+ Pega o ID do Ticket Privado +--//
+            String id = privateTicket.getId();
 
-            Role role = guild.getRolesByName(avaliadorRoleName, true)
-                    .get(0);
+            //--+ Envia mensagem no ticket privado para o avaliando +--//
 
-
-            for(Member roleMember : guild.getMembersWithRoles(role)){
-                roleMember.getUser().openPrivateChannel().queue((channel) -> {
-                    channel.sendMessage("Um novo ticket para **Autor** foi aberto por " + member.getUser().getName() + "\n Verifique!")
-                            .queue();
-                });
-            }
-
-
-            privateTicket.sendMessage("Olá, " + member.getAsMention() + " Fico contente que tenha optado por fazer uma avaliação na Vulcan Novels pra **Autor**.\n" +
-                            "Para iniciarmos o processo, digite **/iniciar-avaliacao**\n" + guild.getRoleById(avaliadorId).getAsMention())
+            privateTicket.sendMessage(
+                                      "> **Avaliando:** " + member.getUser().getName() + "\n"                                                                    +
+                                      "> **Tipo de Avaliação:** Autor\n"                                                                                              +
+                                      "> **Tipo de Avaliador:** " +  guild.getRoleById(avaliadorId).getAsMention()                                                    +
+                                      "\n\n"                                                                                                                            +
+                                      "Eiiii, " + member.getAsMention() + ", tô felizona que tenha optado por fazer uma avaliação na Vulcan Novels para **Autor**.\n" +
+                                      "Para iniciarmos o processo, digite:\n ``/iniciar-avaliacao``\n")
                     .addActionRow(Button.danger("closeTicket", "Fechar ticket"))
                     .queue();
+
+            //--+Pega o ID do servidor da staff e envia informações dos novos tickets em um canal específico+--//
+            Guild vulcanStaff = Main.jda.getGuildById(vulcan.getServerVulcanStaffId());
+            MessageChannel ticketsLog = vulcanStaff.getTextChannelById(vulcan.getChannelTicketsLogId());
+            ticketsLog.sendMessageEmbeds(vulcan.createEmbedNewTicket("Autor", member.getUser().getName(), vulcan.getServerVulcanStaffId(), vulcan.getRoleAvaliadorId(), id).build()).queue();
+
+            //--+ Atribui o nome do avaliando à variável 'avaliand' +--//
+            avaliando = event.getUser().getName();
         }
 
         //Close the ticket when the button is clicked
@@ -140,8 +155,21 @@ public class TicketAutor extends ListenerAdapter {
 
             event.reply("O canal será deletado").queue();
 
+            //--+ Tenta mandar uma embed no canal de logs de ticket e fechar o ticket +--//
             try{
+
+                Vulcan vulcan = new Vulcan();
+
+                Guild vulcanStaff = Main.jda.getGuildById(vulcan.getServerVulcanStaffId());
+                System.out.println("ok1");
+                MessageChannel ticketsLog = vulcanStaff.getTextChannelById(vulcan.getChannelTicketsLogId());
+                System.out.println("ok2");
+                ticketsLog.sendMessageEmbeds(vulcan.deletedTicketEmbed(event.getUser().getName(), avaliando).build())
+                        .queue();
+                System.out.println("ok3");
                 event.getChannel().delete().queue();
+                System.out.println("ok4");
+
             } catch(Exception ex){
                 event.reply("Ocorreu um erro em \"event.getChannel().delete.().queue()\", notifique o responsável pela aplicação!\n Exceção: " + ex)
                         .setEphemeral(false)
@@ -157,7 +185,7 @@ public class TicketAutor extends ListenerAdapter {
                         .setEphemeral(true)
                         .queue();
             } catch(Exception ex){
-                event.reply("Ocorreu um erro em \"event.getMessage().delete().queue()\", notifique o responsável pela aplicação\nExceção: " + ex)
+                event.reply("Ocorreu um erro em ``event.getMessage().delete().queue()``, notifique o responsável pela aplicação\nExceção: " + ex)
                         .setEphemeral(false)
                         .queue();
             }

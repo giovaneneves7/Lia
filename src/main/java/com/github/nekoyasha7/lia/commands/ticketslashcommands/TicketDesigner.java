@@ -3,12 +3,15 @@ package com.github.nekoyasha7.lia.commands.ticketslashcommands;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+import com.github.nekoyasha7.lia.main.Main;
+import com.github.nekoyasha7.lia.util.Vulcan;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -26,6 +29,7 @@ public class TicketDesigner extends TicketAutor{
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
+        //--+ Verifica se é Bot +--//
         if(event.getMember().getUser().isBot()) return;
 
         if (event.getName().equalsIgnoreCase("criar-painel-ticket-designer")) {
@@ -34,7 +38,7 @@ public class TicketDesigner extends TicketAutor{
             String description = event.getOption("descricao").getAsString();
             buttonText = event.getOption("botao").getAsString();
 
-            //Embed setups
+            //--+ Embed setups +--//
             eb.setColor(Color.green);
             eb.setTitle(title);
             eb.setDescription(description);
@@ -55,7 +59,7 @@ public class TicketDesigner extends TicketAutor{
 
             if (event.getComponentId().equals("startButtonDesigner")) {
 
-                String roles = String.valueOf(event.getMember().getRoles());
+                Vulcan vulcan = new Vulcan();
 
                 event.reply("Ticket aberto com sucesso!")
                         .setEphemeral(true)
@@ -82,24 +86,29 @@ public class TicketDesigner extends TicketAutor{
                         .complete();
 
 
-                avaliadorRoleName = "Vice-Líder";
-                avaliadorId = "771617590853369896";
-                Role role = guild.getRolesByName(avaliadorRoleName, true)
-                        .get(0);
+                vulcan.setRoleAvaliadorName("Vice-Líder");
+                vulcan.setRoleAvaliadorId("771617590853369896");
+                avaliadorId = vulcan.getRoleAvaliadorId();
+                String privateTicketId = privateTicket.getId();
 
 
-                for (Member roleMember : guild.getMembersWithRoles(role)) {
-                    roleMember.getUser().openPrivateChannel().queue((channel) -> {
-                        channel.sendMessage("Um novo ticket para **Designer** foi aberto por " + member.getUser().getName() + "\n Verifique!")
-                                .queue();
-                    });
-                }
+                //--+ Envia uma mensagem inicial no ticket +--//
 
-
-                privateTicket.sendMessage("Olá, " + member.getAsMention() + " Fico contente que tenha optado por fazer uma avaliação na Vulcan Novels para **Designer**.\n" +
-                                "Em breve um " + guild.getRoleById(avaliadorId).getAsMention() + " iniciará o seu processo de avaliação!")
+                privateTicket.sendMessage(
+                            "> **Avaliando:** " + member.getUser().getName() + "\n" +
+                                 "> **Tipo de Avaliação:** Designer\n" +
+                                 "> **Tipo de Avaliador:** " +  guild.getRoleById(avaliadorId).getAsMention() + "\n\n" +
+                                 "Olá, " + member.getAsMention() + ", Fico contente que tenha optado por fazer uma avaliação na Vulcan Novels para **Designer**.\n" +
+                                 "Em breve um " + guild.getRoleById(avaliadorId).getAsMention() + " iniciará o seu processo de avaliação!")
                         .addActionRow(Button.danger("closeTicket", "Fechar ticket"))
                         .queue();
+
+                //--+Pega o ID do servidor da staff e envia informações dos novos tickets em um canal específico+--//
+                Guild vulcanStaff = Main.jda.getGuildById(vulcan.getServerVulcanStaffId());
+                MessageChannel ticketsLog = vulcanStaff.getTextChannelById(vulcan.getChannelTicketsLogId());
+                ticketsLog.sendMessageEmbeds(vulcan.createEmbedNewTicket("Designer", member.getUser().getName(), vulcan.getServerVulcanStaffId(), vulcan.getRoleAvaliadorId(), privateTicketId).build()).queue();
+
+                avaliando = event.getUser().getName();
             }
         }
 

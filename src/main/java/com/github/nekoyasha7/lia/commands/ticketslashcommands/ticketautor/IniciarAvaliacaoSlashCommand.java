@@ -27,7 +27,8 @@ public class IniciarAvaliacaoSlashCommand extends ListenerAdapter {
         if(event.getName().equalsIgnoreCase("iniciar-avaliacao")){
 
             event.reply(
-                            "Para iniciarmos a sua avaliação, é necessário que você preencha o nosso formulário para conhecermos um pouco melhor sobre você!\n" +
+                            "Muchi muchi? Para começar a sua avaliação, preciso que você preencha o nosso formulário para conhecermos um pouco melhor sobre você!\n" +
+                                    "Ah! Já ia esquecendo, clique no botão 'Já enviei o form' quando terminar de preencher 🙃\n" +
                                     "> " + formLink)
                     .addActionRow(
                             Button.primary("sendForm", "Já enviei o form!")
@@ -41,9 +42,9 @@ public class IniciarAvaliacaoSlashCommand extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event){
         if(event.getComponentId().equals("sendForm")){
-            event.reply("Ótimo! No formulário que você preencheu havia um documento chamado Documento Inicial. "
-                            + "Neste documento havia uma palavra-passe (senha).\n" +
-                            "Por favor, insira o comando **/senha-avaliacao** junto à senha.")
+            event.reply("Ehhh! Foi tudo bem rápido, certo? ^-^\nVamos prosseguir! No formulário que você preencheu havia um documento chamado **Documento Inicial**. "
+                            + "Neste documento havia uma palavra-passe, uma senha. Segurança de ponta, né?\n" +
+                            "Por favor, insira o comando ``/senha-avaliacao`` junto à senha (o゜▽゜)o☆.")
                     .addActionRow(
                             Button.link(docInicialLink, "Ler o documento inicial novamente")
                     )

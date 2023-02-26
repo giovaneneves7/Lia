@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class Presence extends ListenerAdapter {
     public static boolean setPresence(String presence, String text){
 
+        //+--Verifica qual a atividade passada como parâmetro pelo usuário e retorna 'true'--+//
         switch(presence){
             case "WATCHING":
                 Main.jda.getPresence().setPresence(
@@ -40,6 +41,7 @@ public class Presence extends ListenerAdapter {
                 return true;
         }
 
+        //+--Retorna false caso a atividade seja inválida--+//
         return false;
 
     }

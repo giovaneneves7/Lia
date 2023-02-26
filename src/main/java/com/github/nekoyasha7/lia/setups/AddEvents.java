@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 //<<< Class >>>//
 public class AddEvents extends ListenerAdapter {
 
+    //--+Instancia os eventos que cocorrerão quando um Slash Command for usado+--//
     public static void addEvents(){
         //'Setup' Commands
         Main.jda.addEventListener(new SelecionarPresenca());
@@ -25,6 +26,7 @@ public class AddEvents extends ListenerAdapter {
         Main.jda.addEventListener(new PingSlashCommand());
         Main.jda.addEventListener(new ShipSlashCommand());
         Main.jda.addEventListener(new SaySlashCommand());
+        Main.jda.addEventListener(new AskSlashCommand());
 
         //'Avaliação' Commands
         Main.jda.addEventListener(new SenhaAvaliacaoSlashCommand());
@@ -38,6 +40,6 @@ public class AddEvents extends ListenerAdapter {
 
         //'Administration' Commands
         Main.jda.addEventListener(new AnunciarNovel());
-        //jda.addEventListener(new BrasileirasSlashCommand());
+
     }
 }

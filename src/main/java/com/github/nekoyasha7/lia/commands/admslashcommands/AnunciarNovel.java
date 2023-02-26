@@ -3,6 +3,8 @@ package com.github.nekoyasha7.lia.commands.admslashcommands;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+import com.github.nekoyasha7.lia.util.Vulcan;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -20,15 +22,19 @@ import java.awt.Color;
 //<<< Class >>>//
 public class AnunciarNovel extends ListenerAdapter {
 
-    //Attributes
+    //--+ Attributes +--//
     Role novelRole;
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){
 
+        //--+ Verifica se o usuário é bot +--//
         if(event.getMember().getUser().isBot()) return;
 
         if(event.getName().equalsIgnoreCase("anunciar-novel")){
+
+            //--+ Instancia a Classe Vulcan +--//
+            Vulcan vulcan = new Vulcan();
             String idString = event.getOption("cargo").getAsRole().getId();
 
             novelRole = event.getGuild().getRoleById(idString);
@@ -48,31 +54,20 @@ public class AnunciarNovel extends ListenerAdapter {
 
             EmbedBuilder embed = new EmbedBuilder();
 
+            //--+ Verifica se é necessário marcar everyone +--//
+            Guild guild = event.getGuild();
+            embedMessage += (event.getOption("everyone").getAsBoolean())
+                    ?
+                        "\n\n|| " +
+                        "@everyone " +
+                        guild.getRoleById(vulcan.getRoleCidadaoVulcanicoId()).getAsMention() + " " +
+                        guild.getRoleById(vulcan.getRoleRecrutaId()).getAsMention() + " " +
+                        " ||"
+                    :
+                        "";
 
-            if(event.getOption("everyone").getAsBoolean()){
-                try{
-
-                    String everyoneId = "1069982298419777626";
-                    String cidadaoVulcanicoId = "1069982298419777626";
-                    String recrutaId = "1069982298419777626";
-                    Guild guild = event.getGuild();
-
-                    embedMessage += "\n\n|| " +
-                                                    guild.getRoleById(everyoneId).getAsMention() + " " +
-                                                    guild.getRoleById(cidadaoVulcanicoId).getAsMention() + " " +
-                                                    guild.getRoleById(recrutaId).getAsMention() + " " +
-                                       " ||";
-                } catch (Exception e){
-
-                    System.out.println("Exception in 'if(event.getOption(\"everyone\").getAsBoolean())': \n" + e);
-
-                    embedMessage += "\n\n|| @everyone @Cidadão Vulcânico @Recruta||";
-                }
-            }
-
-
-            //Embed setups
-            embed.setColor(Color.green);
+            //--+ Embed setups +--//
+            embed.setColor(corNacionalidade(event.getOption("nacionalidade").getAsString()));
             embed.setAuthor("Autor da novel: " + event.getOption("autor").getAsUser().getName());
             embed.setTitle(event.getOption("cargo").getAsRole().getName(), event.getOption("link").getAsString());
             embed.setDescription(embedMessage);
@@ -99,20 +94,42 @@ public class AnunciarNovel extends ListenerAdapter {
 
         if(event.getComponentId().equals("getCargo")){
             try{
-                System.out.println("Tentando pegar o cargo "  + novelRole.getName());
+
                 event.getGuild().addRoleToMember(event.getMember(), novelRole)
                         .queue();
-                System.out.println("Após pegar o cargo"  + novelRole.getName());
                 event.reply("Cargo " + novelRole.getAsMention() + " adquirido com sucesso!")
                         .setEphemeral(true)
                         .queue();
+
             } catch(Exception ex){
-                event.reply("Ops, acho que aconteceu um erro do lado do servidor\n Exceção: "  + ex)
+
+                event.reply("Ops, acho que aconteceu um erro do lado do servidor\n Exceção: ``"  + ex  +"``")
                         .setEphemeral(true)
                         .queue();
 
             }
         }
 
+    }
+
+    public Color corNacionalidade(String nacionalidade){
+
+        //--+ Retorna uma cor com base na nacionalidade da novel +--//
+        switch(nacionalidade){
+
+            case "brasileira":
+                return Color.green;
+            case "japonesa":
+                return Color.white;
+            case "ocidental":
+                return Color.cyan;
+            case "coreana":
+                return Color.MAGENTA;
+            case "chinesa":
+                return Color.red;
+            default:
+                return Color.orange;
+
+        }
     }
 }

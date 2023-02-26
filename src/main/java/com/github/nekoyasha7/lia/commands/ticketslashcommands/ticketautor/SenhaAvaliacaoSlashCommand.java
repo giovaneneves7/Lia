@@ -3,6 +3,7 @@ package com.github.nekoyasha7.lia.commands.ticketslashcommands.ticketautor;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -27,31 +28,34 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
 
         if(event.getName().equalsIgnoreCase("senha-avaliacao")){
             if(event.getOption("senha").getAsString().equalsIgnoreCase("banana")){
-                event.reply("Perfect! Este aqui é o TOFE (Treinamento orientado a futuros escravos). "
-                                + "Preciso que leia ele para dar início à avaliação.")
-                        .addActionRow(
-                                Button.link(tofeLink, "Ler o TOFE")
-                        )
-                        .addActionRow(
-                                Button.primary("completeRead", "Já li o TOFE")
-                        )
+                event.reply("*Palmas, palmas!* Boa! Podemos continuar!\n Este aqui é o TOFE (Treinamento orientado a futuros escravos '-'). "
+                                + "Preciso que leia ele para dar início à avaliação. E leia com atenção, viu?")
+                        .addActionRow(lerOTofe(), jaLiOTofe())
                         .setEphemeral(false)
                         .queue();
             }else{
-                event.reply("Ops! Acho que você não leu o nosso documento inicial com atenção.\n" +
-                                "A senha está nele! Só iniciarão sua avaliação quando enviá-la 😕")
+                event.reply("Kyaaa! ≧ ﹏ ≦ Seu rude! Eu te dei tanta atenção e você nem leu o documento com atenção!\n" +
+                                "A senha está nele! Só iniciarão sua avaliação quando enviá-la, hmpf <( ￣^￣)")
                         .setEphemeral(false)
                         .queue();
             }
         }
     }
 
+    public Button lerOTofe(){
+        return Button.link(tofeLink, "Ler o TOFE");
+    }
+
+    public Button jaLiOTofe(){
+        return Button.primary("completeRead", "Já li o TOFE");
+    }
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event){
 
-        //Run if 'TOFE' is read
+        //--+ Run if 'TOFE' is read +--//
         if(event.getComponentId().equals("completeRead")){
-            event.reply("Após ler o TOFE, acha que precisa de 24 horas para deixar o capítulo adequado aos requisitos mínimos(TOFE) ou podemos prosseguir com a avaliação?")
+            event.reply("E aí, depois de ler o TOFE, você acha que precisa de 24 horas para deixar o capítulo adequado aos requisitos mínimos(TOFE) ou podemos prosseguir com a avaliação?")
                     .addActionRow(
                             Button.primary("letsGo", "Podemos prosseguir")
                     )
@@ -63,15 +67,14 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
 
         String[] names = {"NekoYasha", "Galo", "Vento Leste", "Glauber", "YEisu"};
         String[] tags = {"NekoYasha#9735", "Bernardo Monteiro#1417", "Vento Leste#7361", "Glauber1907#1325", "YEisu#2508"};
-        Avaliador[] avaliador = new Avaliador[5];
+        Avaliador[] avaliador = new Avaliador[names.length];
 
-        for(int i = 0; i < avaliador.length; i++){
+        for(int i = 0; i < avaliador.length; i++)
             avaliador[i] = new Avaliador();
-        }
 
         avaliadorSetNames(names, avaliador, tags);
 
-        //Run if author is ready
+        //--+ Run if author is ready +--qq
         if(event.getComponentId().equals("letsGo")){
 
             event.reply(sortAvaliador(avaliador))
@@ -82,7 +85,7 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
         //Run if author need time
         if(event.getComponentId().equals("needTime")){
 
-            event.reply(sortAvaliador(avaliador) + "\n```Você tem o prazo de 24 horas para revisar seu capítulo!```")
+            event.reply(sortAvaliador(avaliador) + "\n```Hmm... Vejo aqui que você precisa de tempo para revisar. Você tem o prazo de 24 horas para revisar seu capítulo!```")
                     .setEphemeral(false)
                     .queue();
 
@@ -99,7 +102,7 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
 
     public String sortAvaliador(Avaliador[] av){
 
-        String message = "```Ótimo, agora marque um dos Avaliadores online para que ele possa dar início à sua avaliação.\n\n";
+        String message = "Ehhh! Chegamos ao fim! Agora, marca aí um dos ~~escravos~~ Avaliadores online para que ele possa dar início à sua avaliação.\n\n``";
         int index = 0;
         Random rand = new Random();
 
@@ -107,6 +110,7 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
 
             index = rand.nextInt(av.length);
 
+            //--+ Decrementa caso o avaliador já tenha sido adicionado à String message ou adiciona caso não
             if(message.contains(av[index].getName()))
                 i--;
             else{
@@ -116,7 +120,7 @@ public class SenhaAvaliacaoSlashCommand extends ListenerAdapter {
 
         }
 
-        message += "```";
+        message += "``";
         return message;
     }
 }
