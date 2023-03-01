@@ -5,7 +5,7 @@ import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
 public class OpenAiRequest {
 
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "API_KEY";
 
     public static String request(String userPrompt){
 
