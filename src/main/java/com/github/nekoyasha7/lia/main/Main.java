@@ -1,45 +1,40 @@
-//<<< Package >>>//
+//========================{ PACKAGE }======================//
 package com.github.nekoyasha7.lia.main;
-//<<< End Package >>>//
+//========================{ FIM PACKAGE }======================//
 
-//<<< Imports >>>//
-import io.github.cdimascio.dotenv.Dotenv;
-
-import com.github.nekoyasha7.lia.setups.*;
-
+//========================{ IMPORTS }======================//
+import com.github.nekoyasha7.lia.setups.events.AddEvents;
+import com.github.nekoyasha7.lia.setups.presence.Presenca;
+import com.github.nekoyasha7.lia.setups.slashcommands.RegisterSlashCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.EnumSet;
-//<<< End Imports >>>//
-/*
-/*@author Nekoyasha
+//========================{ FIM IMPORTS }======================//
+
+/**
+/* @author Nekoyasha
  */
-//<<< Class >>>//
+
 public class Main {
 
     public static JDA jda;
-    
     public static void main(String[] args) {
         startBot();
     }
 
     public static void startBot(){
 
-        //--+Carrega o Token do Bot+--//
-       Dotenv dotenv = Dotenv.load();
-       String token = dotenv.get("TOKEN");
-
        //--+ Constroi o Bot--+//
-        jda = JDABuilder.createDefault(token)
+        jda = JDABuilder.createDefault("MTA2MzQ3Njc0ODUwMDU5ODkwNQ.GwMo9o.x2OV7s9vVXmqeDS8BPcSMcw_XIKxWcjBYoxNLY")
                         .enableIntents((EnumSet.allOf(GatewayIntent.class)))
                         .build();
 
-        //--+Seleciona a Presença (atividade) do Bot+--//
-        Presence.setPresence("WATCHING", "Lendário Mecânico");
+        //--+ Seleciona a Presença (atividade) do Bot +--//
+        Presenca.atualizarPresenca("WATCHING", "Lendário Mecânico");
 
-        //--+Registra os Slash Commands(comandos de barra) do Boy--+//
+        //--+Registra os Slash Commands(comandos de barra) do Bot--+//
         RegisterSlashCommand.registerSlashCommand();
 
         //--+Adiciona a instância dos eventos que oceorrerão quando um Slash Command é usadp--+//
