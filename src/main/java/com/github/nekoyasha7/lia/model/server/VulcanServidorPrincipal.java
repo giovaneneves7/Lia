@@ -20,7 +20,8 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 //========================{ FIM IMPORTS }========================//
 
 @Data
-public class VulcanServidorPrincipal {
+public class VulcanServidorPrincipal 
+{
 
     //========================{ ATRIBUTOS }========================//
     private String nomeCargoAvaliador;
@@ -32,13 +33,13 @@ public class VulcanServidorPrincipal {
     private String idServidorVulcanStaff;
     private String idCanalLogTickets;
     private String idCanalTags;
-
     //========================{ CONSTRUTOR }========================//
 
     /**
      * Insere os dados do servidor da Vulcan.
      */
-    public VulcanServidorPrincipal(){
+    public VulcanServidorPrincipal()
+    {
 
         //--+ Nomes de Cargos +--//
         this.setNomeCargoAvaliador("●❯─•〔Avaliador Novel〕•─❮●");
@@ -73,7 +74,8 @@ public class VulcanServidorPrincipal {
      * @param categoria onde o ticket privado será aberto.
      * @return um ticket privado configurado com as informações passadas por parâmetro.
      */
-    public TextChannel criarNovoTicketPrivado(Guild servidorPrincipal, Member avaliando, String idCargoAvaliador, Category categoria){
+    public TextChannel criarNovoTicketPrivado(Guild servidorPrincipal, Member avaliando, String idCargoAvaliador, Category categoria)
+    {
 
         TextChannel ticketPrivado = servidorPrincipal.createTextChannel("ticket-" + avaliando.getUser().getName())
                 .addPermissionOverride(avaliando, EnumSet.of(Permission.VIEW_CHANNEL), null)
@@ -95,16 +97,18 @@ public class VulcanServidorPrincipal {
      * @param ticketId
      * @return uma embed com informaçõs do ticket aberto.
      */
-    public EmbedBuilder enviarEmbedTicketCriado(String tipoAvaliacao, String avaliando, String idDoServidorStaff, String avaliadorId, String ticketId){
+    public EmbedBuilder enviarEmbedTicketCriado(String tipoAvaliacao, String avaliando, String idDoServidorStaff, String avaliadorId, String ticketId)
+    {
 
         Calendar calendar = Calendar.getInstance();
 
         EmbedBuilder embed = new EmbedBuilder();
 
         Guild vulcanStaff = Main.jda.getGuildById(idDoServidorStaff);
-        embed.setTitle("Novo Ticket de **" + tipoAvaliacao + "** aberto!");
-        embed.setDescription("**Avaliando:** " + avaliando + "\n**Tipo de Avaliação:** " + tipoAvaliacao + "\n**Tipo de avaliador**: " + vulcanStaff.getRoleById(avaliadorId).getAsMention() + "\n**ID do Ticket:** ".concat(ticketId) + "\n**JumpLink:** <#" + ticketId + ">" + "\n" +
-                                "**Data:** " + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + "\n" +
+        embed.setTitle("Novo Ticket de **"      + tipoAvaliacao + "** aberto!");
+        
+        embed.setDescription("**Avaliando:** "  + avaliando     + "\n**Tipo de Avaliação:** " + tipoAvaliacao + "\n**Tipo de avaliador**: " + vulcanStaff.getRoleById(avaliadorId).getAsMention() + "\n**ID do Ticket:** ".concat(ticketId) + "\n**JumpLink:** <#" + ticketId + ">" + "\n" +
+                                "**Data:** "    + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + "\n" +
                                 "**Horário:** " + calendar.getTime());
 
         return embed;
@@ -116,7 +120,8 @@ public class VulcanServidorPrincipal {
      * @param avaliador que fechou o ticket privado.
      * @return Embed com informações do ticket privado fechado.
      */
-    public EmbedBuilder enviarEmbedTicketDeletado(String avaliador){
+    public EmbedBuilder enviarEmbedTicketDeletado(String avaliador)
+    {
 
         Calendar calendar = Calendar.getInstance();
 
