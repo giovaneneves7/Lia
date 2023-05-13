@@ -1,8 +1,8 @@
-//<<< Package >>>//
+//========================{ PACKAGE }========================//
 package com.github.nekoyasha7.lia.model.slashcommands.adm;
-//<<< End Package >>>//
+//========================{ FIM PACKAGE }========================//
 
-//<<< Imports >>>//
+//========================{ IMPORTS }========================//
 import com.github.nekoyasha7.lia.novel.model.Novel;
 import com.github.nekoyasha7.lia.model.server.VulcanServidorPrincipal;
 
@@ -19,19 +19,21 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.Color;
-//<<< End Imports >>>//
+//========================{ FIM IMPORTS }========================//
+
 /**
-/*@author Nekoyasha
+ * 
+ *@author Nekoyasha
  */
 @Data
 public class AnunciarNovel extends ListenerAdapter {
 
-    //-------------------------------{Atributos}-------------------------------//
+    //========================{ ATRIBUTOS }========================//
 
     private Role cargoNovel;
     private Button BotaoLinkNovel;
 
-    //-------------------------------{Getters e Setters}-------------------------------//
+    //========================{ GETTERS E SETTERS }========================//
 
     private Button setBotaoLinkNovel(String link){
         return Button.link(link, "Ler novel");
@@ -41,7 +43,7 @@ public class AnunciarNovel extends ListenerAdapter {
         return Button.success("pegarCargo", "Pegar tag");
     }
 
-    //-------------------------------{Metódos}-------------------------------//
+    //========================{ METODOS }========================//
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){
@@ -52,13 +54,15 @@ public class AnunciarNovel extends ListenerAdapter {
         if(event.getName().equalsIgnoreCase("anunciar-novel")){
 
             //--+ Instancia a Classe Novel +--//
-            Novel novel = new Novel(event.getOption("cargo").getAsRole().getName(),
-                                    event.getOption("autor-ou-tradutor").getAsUser(),
-                                    event.getOption("autor-original").getAsString(),
-                                    event.getOption("sinopse").getAsString(),
-                                    event.getOption("nacionalidade").getAsString(),
-                                    event.getOption("generos").getAsString(),
-                                    event.getOption("cargo").getAsRole());
+            Novel novel = new Novel(
+                                        event.getOption("cargo").getAsRole().getName(),
+                                        event.getOption("autor-ou-tradutor").getAsUser(),
+                                        event.getOption("autor-original").getAsString(),
+                                        event.getOption("sinopse").getAsString(),
+                                        event.getOption("nacionalidade").getAsString(),
+                                        event.getOption("generos").getAsString(),
+                                        event.getOption("cargo").getAsRole()
+                                    );
 
             this.setCargoNovel(event.getGuild().getRoleById(novel.getCargo().getId()));
 
@@ -68,20 +72,25 @@ public class AnunciarNovel extends ListenerAdapter {
             String mencaoCanalTags = tagsChannel.getAsMention();
 
             Guild guild = event.getGuild();
-            String mensagemEmbed = criarMensagemEmbed(novel.getTitulo(), novel.getAutorOuTradutor(), novel.getAutorOriginal(), novel.getGeneros(),
-                                                      novel.getNacionalidade(), novel.getSinopse(),
-                                                      mencaoCanalTags);
+            String mensagemEmbed = criarMensagemEmbed(
+                                                        novel.getTitulo(), 
+                                                        novel.getAutorOuTradutor(), 
+                                                        novel.getAutorOriginal(), 
+                                                        novel.getGeneros(),
+                                                        novel.getNacionalidade(), 
+                                                        novel.getSinopse(),
+                                                        mencaoCanalTags
+                                                    );
 
             //--+ Verifica se é necessário marcar everyone +--//
-            mensagemEmbed += (event.getOption("everyone").getAsBoolean())
-                    ?
-                        "\n\n|| "    +
-                        "@everyone " +
-                        guild.getRoleById(vulcanPrincipal.getIdCargoCidadaoVulcanico()).getAsMention() + " " +
-                        guild.getRoleById(vulcanPrincipal.getIdCargoRecruta()).getAsMention() + " " +
-                        " ||"
-                    :
-                        "";
+            String mensagemEveryone = "\n\n|| @everyone "
+                                        .concat(guild.getRoleById(vulcanPrincipal.getIdCargoCidadaoVulcanico()).getAsMention())
+                                        .concat(" ")
+                                        .concat(guild.getRoleById(vulcanPrincipal.getIdCargoRecruta()).getAsMention())
+                                        .concat(" ")
+                                        .concat(" ||");
+
+            mensagemEmbed += (event.getOption("everyone").getAsBoolean()) ? mensagemEmbed : "";
 
             //--+ Configura a Embed +--//
             EmbedBuilder embed = new EmbedBuilder();
@@ -141,18 +150,23 @@ public class AnunciarNovel extends ListenerAdapter {
 
             try{
 
+                //--+ Dá o cargo da novel ao membro +--//
                 event.getGuild().addRoleToMember(event.getMember(), this.getCargoNovel())
                         .queue();
 
-                event.reply("Cargo " + this.getCargoNovel().getAsMention() + " adquirido com sucesso!")
+                event.reply("Cargo ".concat(this.getCargoNovel().getAsMention())
+                                    .concat(" adquirido com sucesso!"))
                         .setEphemeral(true)
                         .queue();
 
-                System.out.println(event.getUser().getName() + " Pegou o cargo " + this.getCargoNovel().getName());
+                System.out.println(event.getUser().getName().concat(" Pegou o cargo ")
+                                                            .concat(this.getCargoNovel().getName()));
 
             } catch(Exception ex){
 
-                event.reply("Ops, acho que aconteceu um erro do lado do servidor\n Exceção: ``"  + ex  +"``")
+                event.reply("Ops, acho que aconteceu um erro do lado do servidor\n Exceção: ``"
+                        .concat(ex)
+                        .concat("``"))
                         .setEphemeral(true)
                         .queue();
 
