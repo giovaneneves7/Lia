@@ -8,8 +8,12 @@ Discord Bot avaliador da Vulcan Novels baseado em Java.
 <hr>
 
 > Criar tickets privados.
+
 > Anúncio de novels.
+
 > Aúxilio na avaliação de autores.
+
 > Gerenciamento de cargos de leitores.
+
 > Conexão com a API do chatGPT.
 
