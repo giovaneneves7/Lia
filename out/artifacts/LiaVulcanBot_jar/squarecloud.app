@@ -1,5 +1,5 @@
 DISPLAY_NAME=Lia
-DESCRIPTION=Não sei o que colocar, só quero dizer que a Square é top.
+DESCRIPTION=Versão 2.0 da Lia (bugsfix).
 MAIN=LiaVulcanBot.jar
 MEMORY=600
 VERSION=recommended
