@@ -4,25 +4,30 @@ package br.com.vulcan.bot.lia.main;
 
 //========================{ IMPORTS }======================//
 import br.com.vulcan.bot.lia.config.AddEvents;
-import br.com.vulcan.bot.lia.config.Presenca;
+import br.com.vulcan.bot.lia.feature.presenca.domain.model.Presenca;
 import br.com.vulcan.bot.lia.config.RegisterSlashCommand;
+import br.com.vulcan.bot.lia.infrastructure.builder.BotBuilder;
+import br.com.vulcan.bot.lia.infrastructure.model.bot.Bot;
+import br.com.vulcan.bot.lia.infrastructure.service.BotServiceImpl;
+import br.com.vulcan.bot.lia.infrastructure.service.IBotService;
+import br.com.vulcan.bot.lia.singleton.JdaSingleton;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.EnumSet;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 //========================{ FIM IMPORTS }======================//
 
 /**
- * @author Nekoyasha
+ * @author Giovane Neves
  * @version 1.0.2 (Beta)
  */
 
 public class Main {
 
-    private static String token ="MTAyNjYxMDMzODg4NTU1NDI3OA.GZlkFK.HLJb73Bgum7U0zkkrXe6Z3TV4WnO0iZNvO4VL4";
-    public static JDA jda;
-
+    
     public static void main(String[] args) {
         startBot();
     }
@@ -30,18 +35,16 @@ public class Main {
     public static void startBot() {
 
         // --+ Constroi o Bot--+//
-        jda = JDABuilder.createDefault(token/*"MTA2MzQ3Njc0ODUwMDU5ODkwNQ.Gt1I2q.6whd_xE0Id2QsbDqxEiA-fV5shobmrRk1qxojo"*/)
-                .enableIntents((EnumSet.allOf(GatewayIntent.class)))
-                .build();
-
-        // --+ Seleciona a Presença (atividade) do Bot +--//
-        Presenca.atualizarPresenca("WATCHING", "Lendário Mecânico");
-
-        // --+Registra os Slash Commands(comandos de barra) do Bot--+//
-        RegisterSlashCommand.registerSlashCommand();
-
-        // --+Adiciona a instância dos eventos que oceorrerão quando um Slash Command é
-        // usadp--+//
+        Bot bot = new BotBuilder()
+            .setInstancia(JdaSingleton.getInstance())
+            .setStatus(OnlineStatus.ONLINE)
+            .setAtividade(Activity.of(Activity.ActivityType.WATCHING, "O Lendário Mecânico"))
+            .build();
+        
+        IBotService botService = new BotServiceImpl();
+        botService.registrarComandosSlash(bot);
+        
         AddEvents.addEvents();
+        
     }
 }
