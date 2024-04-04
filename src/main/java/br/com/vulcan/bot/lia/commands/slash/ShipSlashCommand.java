@@ -4,6 +4,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 
 
 //<<< Imports >>>//
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -13,7 +14,7 @@ import java.util.Random;
 /*@author Nekoyasha
  */
 
-public class ShipSlashCommand extends ListenerAdapter{
+public class ShipSlashCommand extends ListenerAdapter implements SlashCommand{
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){

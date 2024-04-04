@@ -3,6 +3,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 //<<< End Package >>>//
 
 //<<< Imports >>>//
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 //<<< End Imports >>>//
@@ -11,7 +12,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 /*@author Nekoyasha
  */
 
-public class PingSlashCommand extends ListenerAdapter{
+public class PingSlashCommand extends ListenerAdapter implements SlashCommand{
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){

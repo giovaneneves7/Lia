@@ -4,6 +4,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 
 //========================{ IMPORTS }========================//
 import br.com.vulcan.bot.lia.entidades.Saudacao;
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 30/07/2023 11:21
  */
 
-public class IniciarAvaliacao extends ListenerAdapter {
+public class IniciarAvaliacao extends ListenerAdapter implements SlashCommand{
 
     //========================{ ATRIBUTOS }========================//
     private final String LINK_FORMULARIO = "https://forms.gle/HQrosxxW9khNzZ1NA";

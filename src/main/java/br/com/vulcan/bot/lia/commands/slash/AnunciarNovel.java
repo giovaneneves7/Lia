@@ -4,8 +4,9 @@ package br.com.vulcan.bot.lia.commands.slash;
 
 //========================{ IMPORTS }========================//
 import br.com.vulcan.bot.lia.entidades.VulcanServidorPrincipal;
-import br.com.vulcan.bot.lia.config.Presenca;
+import br.com.vulcan.bot.lia.feature.presenca.domain.model.Presenca;
 import br.com.vulcan.bot.lia.entidades.Novel;
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 
 import lombok.Data;
 
@@ -27,7 +28,7 @@ import java.awt.Color;
  *@author Nekoyasha
  */
 @Data
-public class AnunciarNovel extends ListenerAdapter {
+public class AnunciarNovel extends ListenerAdapter implements SlashCommand{
 
     //========================{ ATRIBUTOS }========================//
 

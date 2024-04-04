@@ -4,6 +4,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 
 //========================{ IMPORTS }========================//
 import br.com.vulcan.bot.lia.entidades.tickets.Ticket;
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -13,7 +14,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 /**
  * @author NekoYasha
  */
-public class CreateTicketPanel extends Ticket {
+public class CreateTicketPanel extends Ticket implements SlashCommand{
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {

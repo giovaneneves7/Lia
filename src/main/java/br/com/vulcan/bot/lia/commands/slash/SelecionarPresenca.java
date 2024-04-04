@@ -4,7 +4,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 
 //========================{ IMPORTS }========================//
 
-import br.com.vulcan.bot.lia.config.Presenca;
+import br.com.vulcan.bot.lia.feature.presenca.domain.model.Presenca;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

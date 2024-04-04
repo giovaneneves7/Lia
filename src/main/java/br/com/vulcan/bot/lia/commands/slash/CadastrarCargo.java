@@ -1,5 +1,6 @@
 package br.com.vulcan.bot.lia.commands.slash;
 
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class CadastrarCargo extends ListenerAdapter {
+public class CadastrarCargo extends ListenerAdapter implements SlashCommand{
 
 
     @Override

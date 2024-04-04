@@ -5,6 +5,7 @@ package br.com.vulcan.bot.lia.commands.slash;
 //========================{ IMPORTS }========================//
 import br.com.vulcan.bot.lia.entidades.Saudacao;
 import br.com.vulcan.bot.lia.infrastructure.facade.FacadeInstance;
+import br.com.vulcan.bot.lia.infrastructure.interfaces.SlashCommand;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author NekoYasha
  */
 
-public class SenhaAvaliacao extends ListenerAdapter {
+public class SenhaAvaliacao extends ListenerAdapter implements SlashCommand{
 
     //========================{ ATRIBUTOS }========================//
     private final String LINK_TOFE = "https://docs.google.com/document/d/1PGIebJHXwJGONP5f4A5b6EisVEz8XZj4-Wl7OKL3Y6A/edit";
